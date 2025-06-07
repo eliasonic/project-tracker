@@ -1,0 +1,36 @@
+package com.buildmaster.project_tracker.controller;
+
+import com.buildmaster.project_tracker.model.mongo.AuditLog;
+import com.buildmaster.project_tracker.service.AuditLogService;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/logs")
+@RequiredArgsConstructor
+public class AuditLogController {
+    private final AuditLogService auditLogService;
+
+    @GetMapping
+    @Operation(summary = "Get all logs with pagination")
+    public Page<AuditLog> getAllLogs(Pageable pageable) {
+        return auditLogService.getAllLogs(pageable);
+    }
+
+    @GetMapping("/filter")
+    @Operation(summary = "Get logs by entity type or actor name")
+    public List<AuditLog> getFilteredLogs(
+            @RequestParam(required = false) String entityType, @RequestParam(required = false) String actorName) {
+
+        if (entityType != null) {
+            return auditLogService.getLogsByEntityType(entityType);
+        } else if (actorName != null) {
+            return auditLogService.getLogsByActorName(actorName);
+        }
+        return List.of();
+    }
+}
