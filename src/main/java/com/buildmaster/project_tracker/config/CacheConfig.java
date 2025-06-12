@@ -1,6 +1,7 @@
 package com.buildmaster.project_tracker.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,10 @@ import java.time.Duration;
 @EnableCaching
 public class CacheConfig {
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper redisObjectMapper;
 
-    public CacheConfig(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public CacheConfig(@Qualifier("redisObjectMapper") ObjectMapper redisObjectMapper) {
+        this.redisObjectMapper = redisObjectMapper;
     }
 
     @Bean
@@ -29,6 +30,6 @@ public class CacheConfig {
                 .entryTtl(Duration.ofMinutes(30))
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper)));
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer(redisObjectMapper)));
     }
 }
