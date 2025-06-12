@@ -19,17 +19,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Title is required")
-    @Size(max = 100, message = "Title must be less than 100 characters")
     private String title;
 
-    @Size(max = 500, message = "Description must be less than 500 characters")
     private String description;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status = TaskStatus.TODO;
 
-    @FutureOrPresent(message = "Due date must be in the present or future")
     private LocalDate dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

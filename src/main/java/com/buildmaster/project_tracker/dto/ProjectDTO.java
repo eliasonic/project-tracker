@@ -8,13 +8,14 @@ import java.time.LocalDate;
 public record ProjectDTO(
         Long id,
 
-        @NotBlank @Size(max = 100)
+        @NotBlank(message = "Project name is required")
+        @Size(max = 100, message = "Project name must be less than 100 characters")
         String name,
 
-        @Size(max = 500)
+        @Size(max = 500, message = "Description must be less than 500 characters")
         String description,
 
-        @Future
+        @Future(message = "Deadline must be in the future")
         LocalDate deadline,
 
         ProjectStatus status

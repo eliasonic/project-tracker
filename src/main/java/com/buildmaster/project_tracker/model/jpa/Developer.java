@@ -17,16 +17,11 @@ public class Developer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name is required")
-    @Size(max = 100, message = "Name must be less than 100 characters")
     private String name;
 
-    @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is required")
     @Column(unique = true)
     private String email;
 
-    @Size(max = 500, message = "Skills must be less than 500 characters")
     private String skills;
 
     @ManyToMany(mappedBy = "developers")

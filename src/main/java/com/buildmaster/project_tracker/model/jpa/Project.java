@@ -19,14 +19,10 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Project name is required")
-    @Size(max = 100, message = "Project name must be less than 100 characters")
     private String name;
 
-    @Size(max = 500, message = "Description must be less than 500 characters")
     private String description;
 
-    @Future(message = "Deadline must be in the future")
     private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)
