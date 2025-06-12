@@ -25,12 +25,6 @@ public class AuditLogController {
     @Operation(summary = "Get logs by entity type or actor name")
     public List<AuditLog> getFilteredLogs(
             @RequestParam(required = false) String entityType, @RequestParam(required = false) String actorName) {
-
-        if (entityType != null) {
-            return auditLogService.getLogsByEntityType(entityType);
-        } else if (actorName != null) {
-            return auditLogService.getLogsByActorName(actorName);
-        }
-        return List.of();
+        return auditLogService.getFilteredLogs(entityType, actorName);
     }
 }

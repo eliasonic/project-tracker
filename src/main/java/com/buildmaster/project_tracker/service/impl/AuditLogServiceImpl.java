@@ -22,13 +22,12 @@ public class AuditLogServiceImpl implements AuditLogService {
         return auditLogRepository.findAll(pageable);
     }
 
-    @Override
-    public List<AuditLog> getLogsByEntityType(String entityType) {
-        return auditLogRepository.findByEntityType(entityType);
-    }
-
-    @Override
-    public List<AuditLog> getLogsByActorName(String actorName) {
-        return auditLogRepository.findByActorName(actorName);
+    public List<AuditLog> getFilteredLogs(String entityType, String actorName) {
+        if (entityType != null) {
+            return auditLogRepository.findByEntityType(entityType);
+        } else if (actorName != null) {
+            return auditLogRepository.findByActorName(actorName);
+        }
+        return List.of();
     }
 }
