@@ -33,6 +33,10 @@ Below are the system diagrams used for understanding the architecture and data m
 
 ![ER Diagram](./docs/diagrams/ERD.png)
 
+### OAuth2 Flow Sequence Diagram
+
+![ER Diagram](./docs/diagrams/sequence-diagram.png)
+
 ## Setup
 
 ### Prerequisites

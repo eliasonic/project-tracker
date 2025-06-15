@@ -1,12 +1,1941 @@
 openapi: 3.1.0
 info:
   title: Project Tracker API
-  description: "API for managing projects, tasks and developers"
-  version: 1.0.0
+  version: "1.0"
 servers:
 - url: http://localhost:8080
   description: Generated server url
+security:
+- bearerAuth: []
 paths:
+  /auditLogs:
+    get:
+      tags:
+      - audit-log-entity-controller
+      description: get-auditlog
+      operationId: getCollectionResource-auditlog-get
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelAuditLog"
+            application/x-spring-data-compact+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelAuditLog"
+            text/uri-list:
+              schema:
+                type: string
+    post:
+      tags:
+      - audit-log-entity-controller
+      description: create-auditlog
+      operationId: postCollectionResource-auditlog-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditLogRequestBody"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+  /auditLogs/search/findByActorName:
+    get:
+      tags:
+      - audit-log-search-controller
+      operationId: executeSearch-auditlog-get
+      parameters:
+      - name: actorName
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelEntityModelAuditLog"
+        "404":
+          description: Not Found
+  /auditLogs/search/findByEntityType:
+    get:
+      tags:
+      - audit-log-search-controller
+      operationId: executeSearch-auditlog-get_1
+      parameters:
+      - name: entityType
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelEntityModelAuditLog"
+        "404":
+          description: Not Found
+  /auditLogs/{id}:
+    get:
+      tags:
+      - audit-log-entity-controller
+      description: get-auditlog
+      operationId: getItemResource-auditlog-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - audit-log-entity-controller
+      description: update-auditlog
+      operationId: putItemResource-auditlog-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditLogRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - audit-log-entity-controller
+      description: delete-auditlog
+      operationId: deleteItemResource-auditlog-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - audit-log-entity-controller
+      description: patch-auditlog
+      operationId: patchItemResource-auditlog-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditLogRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+        "204":
+          description: No Content
+  /authAuditLogs:
+    get:
+      tags:
+      - auth-audit-log-entity-controller
+      description: get-authauditlog
+      operationId: getCollectionResource-authauditlog-get
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelAuthAuditLog"
+            application/x-spring-data-compact+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelAuthAuditLog"
+            text/uri-list:
+              schema:
+                type: string
+    post:
+      tags:
+      - auth-audit-log-entity-controller
+      description: create-authauditlog
+      operationId: postCollectionResource-authauditlog-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthAuditLogRequestBody"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuthAuditLog"
+  /authAuditLogs/{id}:
+    get:
+      tags:
+      - auth-audit-log-entity-controller
+      description: get-authauditlog
+      operationId: getItemResource-authauditlog-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuthAuditLog"
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - auth-audit-log-entity-controller
+      description: update-authauditlog
+      operationId: putItemResource-authauditlog-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthAuditLogRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuthAuditLog"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuthAuditLog"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - auth-audit-log-entity-controller
+      description: delete-authauditlog
+      operationId: deleteItemResource-authauditlog-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - auth-audit-log-entity-controller
+      description: patch-authauditlog
+      operationId: patchItemResource-authauditlog-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthAuditLogRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelAuthAuditLog"
+        "204":
+          description: No Content
+  /developers:
+    get:
+      tags:
+      - developer-entity-controller
+      description: get-developer
+      operationId: getCollectionResource-developer-get
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelDeveloper"
+            application/x-spring-data-compact+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelDeveloper"
+            text/uri-list:
+              schema:
+                type: string
+    post:
+      tags:
+      - developer-entity-controller
+      description: create-developer
+      operationId: postCollectionResource-developer-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeveloperRequestBody"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+  /developers/search/findByEmail:
+    get:
+      tags:
+      - developer-search-controller
+      operationId: executeSearch-developer-get
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        "404":
+          description: Not Found
+  /developers/search/findTop5DevelopersByTaskCount:
+    get:
+      tags:
+      - developer-search-controller
+      operationId: executeSearch-developer-get_1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelEntityModelDeveloper"
+        "404":
+          description: Not Found
+  /developers/{id}:
+    get:
+      tags:
+      - developer-entity-controller
+      description: get-developer
+      operationId: getItemResource-developer-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - developer-entity-controller
+      description: update-developer
+      operationId: putItemResource-developer-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeveloperRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - developer-entity-controller
+      description: delete-developer
+      operationId: deleteItemResource-developer-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - developer-entity-controller
+      description: patch-developer
+      operationId: patchItemResource-developer-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeveloperRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        "204":
+          description: No Content
+  /developers/{id}/tasks:
+    get:
+      tags:
+      - developer-property-reference-controller
+      description: get-task-by-developer-Id
+      operationId: followPropertyReference-developer-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+            text/uri-list:
+              schema:
+                type: string
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - developer-property-reference-controller
+      description: update-task-by-developer-Id
+      operationId: createPropertyReference-developer-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - developer-property-reference-controller
+      description: delete-task-by-developer-Id
+      operationId: deletePropertyReference-developer-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - developer-property-reference-controller
+      description: patch-task-by-developer-Id
+      operationId: createPropertyReference-developer-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "204":
+          description: No Content
+  /developers/{id}/tasks/{propertyId}:
+    get:
+      tags:
+      - developer-property-reference-controller
+      description: get-task-by-developer-Id
+      operationId: followPropertyReference-developer-get_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "404":
+          description: Not Found
+    delete:
+      tags:
+      - developer-property-reference-controller
+      description: delete-task-by-developer-Id
+      operationId: deletePropertyReferenceId-developer-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+  /profile:
+    get:
+      tags:
+      - profile-controller
+      operationId: listAllFormsOfMetadata
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/RepresentationModelObject"
+  /profile/auditLogs:
+    get:
+      tags:
+      - profile-controller
+      operationId: descriptor
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+            application/alps+json:
+              schema:
+                type: string
+            application/schema+json:
+              schema:
+                $ref: "#/components/schemas/JsonSchema"
+  /profile/authAuditLogs:
+    get:
+      tags:
+      - profile-controller
+      operationId: descriptor_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+            application/alps+json:
+              schema:
+                type: string
+            application/schema+json:
+              schema:
+                $ref: "#/components/schemas/JsonSchema"
+  /profile/developers:
+    get:
+      tags:
+      - profile-controller
+      operationId: descriptor_2
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+            application/alps+json:
+              schema:
+                type: string
+            application/schema+json:
+              schema:
+                $ref: "#/components/schemas/JsonSchema"
+  /profile/projects:
+    get:
+      tags:
+      - profile-controller
+      operationId: descriptor_3
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+            application/alps+json:
+              schema:
+                type: string
+            application/schema+json:
+              schema:
+                $ref: "#/components/schemas/JsonSchema"
+  /profile/tasks:
+    get:
+      tags:
+      - profile-controller
+      operationId: descriptor_4
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+            application/alps+json:
+              schema:
+                type: string
+            application/schema+json:
+              schema:
+                $ref: "#/components/schemas/JsonSchema"
+  /profile/users:
+    get:
+      tags:
+      - profile-controller
+      operationId: descriptor_5
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+            application/alps+json:
+              schema:
+                type: string
+            application/schema+json:
+              schema:
+                $ref: "#/components/schemas/JsonSchema"
+  /projects:
+    get:
+      tags:
+      - project-entity-controller
+      description: get-project
+      operationId: getCollectionResource-project-get
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelProject"
+            application/x-spring-data-compact+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelProject"
+            text/uri-list:
+              schema:
+                type: string
+    post:
+      tags:
+      - project-entity-controller
+      description: create-project
+      operationId: postCollectionResource-project-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectRequestBody"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+  /projects/search/findProjectsWithoutTasks:
+    get:
+      tags:
+      - project-search-controller
+      operationId: executeSearch-project-get
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelEntityModelProject"
+        "404":
+          description: Not Found
+  /projects/{id}:
+    get:
+      tags:
+      - project-entity-controller
+      description: get-project
+      operationId: getItemResource-project-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - project-entity-controller
+      description: update-project
+      operationId: putItemResource-project-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - project-entity-controller
+      description: delete-project
+      operationId: deleteItemResource-project-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - project-entity-controller
+      description: patch-project
+      operationId: patchItemResource-project-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "204":
+          description: No Content
+  /projects/{id}/tasks:
+    get:
+      tags:
+      - project-property-reference-controller
+      description: get-task-by-project-Id
+      operationId: followPropertyReference-project-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+            text/uri-list:
+              schema:
+                type: string
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - project-property-reference-controller
+      description: update-task-by-project-Id
+      operationId: createPropertyReference-project-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - project-property-reference-controller
+      description: delete-task-by-project-Id
+      operationId: deletePropertyReference-project-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - project-property-reference-controller
+      description: patch-task-by-project-Id
+      operationId: createPropertyReference-project-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "204":
+          description: No Content
+  /projects/{id}/tasks/{propertyId}:
+    get:
+      tags:
+      - project-property-reference-controller
+      description: get-task-by-project-Id
+      operationId: followPropertyReference-project-get_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelTask"
+        "404":
+          description: Not Found
+    delete:
+      tags:
+      - project-property-reference-controller
+      description: delete-task-by-project-Id
+      operationId: deletePropertyReferenceId-project-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+  /tasks:
+    get:
+      tags:
+      - task-entity-controller
+      description: get-task
+      operationId: getCollectionResource-task-get
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelTask"
+            application/x-spring-data-compact+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelTask"
+            text/uri-list:
+              schema:
+                type: string
+    post:
+      tags:
+      - task-entity-controller
+      description: create-task
+      operationId: postCollectionResource-task-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequestBody"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelTask"
+  /tasks/search/findByDevelopersId:
+    get:
+      tags:
+      - task-search-controller
+      operationId: executeSearch-task-get
+      parameters:
+      - name: developerId
+        in: query
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelTask"
+        "404":
+          description: Not Found
+  /tasks/search/findByProjectId:
+    get:
+      tags:
+      - task-search-controller
+      operationId: executeSearch-task-get_1
+      parameters:
+      - name: projectId
+        in: query
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelTask"
+        "404":
+          description: Not Found
+  /tasks/search/findOverdueTasks:
+    get:
+      tags:
+      - task-search-controller
+      operationId: executeSearch-task-get_2
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelEntityModelTask"
+        "404":
+          description: Not Found
+  /tasks/{id}:
+    get:
+      tags:
+      - task-entity-controller
+      description: get-task
+      operationId: getItemResource-task-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelTask"
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - task-entity-controller
+      description: update-task
+      operationId: putItemResource-task-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelTask"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelTask"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - task-entity-controller
+      description: delete-task
+      operationId: deleteItemResource-task-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - task-entity-controller
+      description: patch-task
+      operationId: patchItemResource-task-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelTask"
+        "204":
+          description: No Content
+  /tasks/{id}/developers:
+    get:
+      tags:
+      - task-property-reference-controller
+      description: get-developer-by-task-Id
+      operationId: followPropertyReference-task-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelDeveloper"
+            text/uri-list:
+              schema:
+                type: string
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - task-property-reference-controller
+      description: update-developer-by-task-Id
+      operationId: createPropertyReference-task-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelDeveloper"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelDeveloper"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - task-property-reference-controller
+      description: delete-developer-by-task-Id
+      operationId: deletePropertyReference-task-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - task-property-reference-controller
+      description: patch-developer-by-task-Id
+      operationId: createPropertyReference-task-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelDeveloper"
+        "204":
+          description: No Content
+  /tasks/{id}/developers/{propertyId}:
+    get:
+      tags:
+      - task-property-reference-controller
+      description: get-developer-by-task-Id
+      operationId: followPropertyReference-task-get_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/CollectionModelDeveloper"
+        "404":
+          description: Not Found
+    delete:
+      tags:
+      - task-property-reference-controller
+      description: delete-developer-by-task-Id
+      operationId: deletePropertyReferenceId-task-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+  /tasks/{id}/project:
+    get:
+      tags:
+      - task-property-reference-controller
+      description: get-project-by-task-Id
+      operationId: followPropertyReference-task-get_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+            text/uri-list:
+              schema:
+                type: string
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - task-property-reference-controller
+      description: update-project-by-task-Id
+      operationId: createPropertyReference-task-put_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - task-property-reference-controller
+      description: delete-project-by-task-Id
+      operationId: deletePropertyReference-task-delete_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - task-property-reference-controller
+      description: patch-project-by-task-Id
+      operationId: createPropertyReference-task-patch_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          application/x-spring-data-compact+json:
+            schema:
+              $ref: "#/components/schemas/CollectionModelObject"
+          text/uri-list:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "204":
+          description: No Content
+  /tasks/{id}/project/{propertyId}:
+    get:
+      tags:
+      - task-property-reference-controller
+      description: get-project-by-task-Id
+      operationId: followPropertyReference-task-get_3
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelProject"
+        "404":
+          description: Not Found
+    delete:
+      tags:
+      - task-property-reference-controller
+      description: delete-project-by-task-Id
+      operationId: deletePropertyReferenceId-task-delete_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+  /users:
+    get:
+      tags:
+      - user-entity-controller
+      summary: Get all users
+      description: get-user
+      operationId: getCollectionResource-user-get
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/UserDto"
+                - $ref: "#/components/schemas/PagedModelEntityModelUser"
+            application/x-spring-data-compact+json:
+              schema:
+                $ref: "#/components/schemas/PagedModelEntityModelUser"
+            text/uri-list:
+              schema:
+                type: string
+    post:
+      tags:
+      - user-entity-controller
+      description: create-user
+      operationId: postCollectionResource-user-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestBody"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelUser"
+  /users/search/existsByEmail:
+    get:
+      tags:
+      - user-search-controller
+      operationId: executeSearch-user-get
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: boolean
+        "404":
+          description: Not Found
+  /users/search/findByEmail:
+    get:
+      tags:
+      - user-search-controller
+      operationId: executeSearch-user-get_1
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelUser"
+        "404":
+          description: Not Found
+  /users/{id}:
+    get:
+      tags:
+      - user-entity-controller
+      description: get-user
+      operationId: getItemResource-user-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelUser"
+        "404":
+          description: Not Found
+    put:
+      tags:
+      - user-entity-controller
+      description: update-user
+      operationId: putItemResource-user-put
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelUser"
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelUser"
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - user-entity-controller
+      description: delete-user
+      operationId: deleteItemResource-user-delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    patch:
+      tags:
+      - user-entity-controller
+      description: patch-user
+      operationId: patchItemResource-user-patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/EntityModelUser"
+        "204":
+          description: No Content
   /api/v1/tasks/{id}:
     get:
       tags:
@@ -24,7 +1953,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/TaskDTO"
     put:
@@ -54,7 +1983,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/TaskDTO"
     delete:
@@ -94,7 +2023,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/ProjectDTO"
     put:
@@ -124,7 +2053,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/ProjectDTO"
     delete:
@@ -164,7 +2093,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/DeveloperDTO"
     put:
@@ -194,7 +2123,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/DeveloperDTO"
     delete:
@@ -217,6 +2146,42 @@ paths:
       responses:
         "200":
           description: OK
+  /auth/register:
+    post:
+      tags:
+      - auth-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /auth/login:
+    post:
+      tags:
+      - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
   /api/v1/tasks:
     get:
       tags:
@@ -233,7 +2198,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/PageTaskDTO"
     post:
@@ -257,7 +2222,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/TaskDTO"
   /api/v1/projects:
@@ -276,7 +2241,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/PageProjectDTO"
     post:
@@ -300,7 +2265,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/ProjectDTO"
   /api/v1/developers:
@@ -319,7 +2284,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/PageDeveloperDTO"
     post:
@@ -343,21 +2308,118 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/DeveloperDTO"
-  /hello:
+  /users/me:
     get:
       tags:
-      - hello-controller
-      operationId: hello
+      - user-controller
+      summary: Get current user
+      operationId: getCurrentUser
       responses:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
-                type: string
+                $ref: "#/components/schemas/UserDto"
+  /logs:
+    get:
+      tags:
+      - audit-log-controller
+      summary: Get all logs with pagination
+      operationId: getAllLogs
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/PageAuditLog"
+  /logs/filter:
+    get:
+      tags:
+      - audit-log-controller
+      summary: Get logs by entity type or actor name
+      operationId: getFilteredLogs
+      parameters:
+      - name: entityType
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: actorName
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuditLog"
+  /logs/auth:
+    get:
+      tags:
+      - audit-log-controller
+      summary: Get auth logs
+      operationId: getAuthLogs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuthAuditLog"
+  /auth/oauth2/success:
+    get:
+      tags:
+      - auth-controller
+      operationId: oauthSuccess
+      parameters:
+      - name: token
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /auth/oauth2/failure:
+    get:
+      tags:
+      - auth-controller
+      operationId: oauthFailure
+      parameters:
+      - name: error
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/tasks/project/{projectId}:
     get:
       tags:
@@ -380,7 +2442,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/PageTaskDTO"
   /api/v1/tasks/overdue:
@@ -393,7 +2455,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 type: array
                 items:
@@ -420,7 +2482,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 $ref: "#/components/schemas/PageTaskDTO"
   /api/v1/projects/without-tasks:
@@ -433,56 +2495,11 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProjectDTO"
-  /api/v1/logs:
-    get:
-      tags:
-      - audit-log-controller
-      summary: Get all logs with pagination
-      operationId: getAllLogs
-      parameters:
-      - name: pageable
-        in: query
-        required: true
-        schema:
-          $ref: "#/components/schemas/Pageable"
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/PageAuditLog"
-  /api/v1/logs/filter:
-    get:
-      tags:
-      - audit-log-controller
-      summary: Get logs by entity type or actor name
-      operationId: getFilteredLogs
-      parameters:
-      - name: entityType
-        in: query
-        required: false
-        schema:
-          type: string
-      - name: actorName
-        in: query
-        required: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AuditLog"
   /api/v1/developers/top:
     get:
       tags:
@@ -493,13 +2510,606 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/hal+json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/DeveloperDTO"
 components:
   schemas:
+    AbstractJsonSchemaPropertyObject:
+      type: object
+      properties:
+        title:
+          type: string
+        readOnly:
+          type: boolean
+    Item:
+      type: object
+      properties:
+        type:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/AbstractJsonSchemaPropertyObject"
+        requiredProperties:
+          type: array
+          items:
+            type: string
+    JsonSchema:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/AbstractJsonSchemaPropertyObject"
+        requiredProperties:
+          type: array
+          items:
+            type: string
+        definitions:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/Item"
+        type:
+          type: string
+        $schema:
+          type: string
+    RepresentationModelObject:
+      type: object
+      properties:
+        _links:
+          $ref: "#/components/schemas/Links"
+    EntityModelUser:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+            - ROLE_ADMIN
+            - ROLE_MANAGER
+            - ROLE_DEVELOPER
+            - ROLE_CONTRACTOR
+          uniqueItems: true
+        provider:
+          type: string
+        providerId:
+          type: string
+        _links:
+          $ref: "#/components/schemas/Links"
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+    PagedModelEntityModelUser:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            users:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelUser"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    EntityModelDeveloper:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        skills:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        _links:
+          $ref: "#/components/schemas/Links"
+    PagedModelEntityModelDeveloper:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            developers:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    CollectionModelTask:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            tasks:
+              type: array
+              items:
+                $ref: "#/components/schemas/TaskResponse"
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelObject:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            objects:
+              type: array
+              items:
+                type: object
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelEntityModelDeveloper:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            developers:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelDeveloper"
+        _links:
+          $ref: "#/components/schemas/Links"
+    EntityModelTask:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - BLOCKED
+        dueDate:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        _links:
+          $ref: "#/components/schemas/Links"
+    PagedModelEntityModelTask:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            tasks:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelTask"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    CollectionModelDeveloper:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            developers:
+              type: array
+              items:
+                $ref: "#/components/schemas/DeveloperResponse"
+        _links:
+          $ref: "#/components/schemas/Links"
+    EntityModelProject:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        deadline:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - NOT_STARTED
+          - IN_PROGRESS
+          - COMPLETED
+          - ON_HOLD
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelEntityModelTask:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            tasks:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelTask"
+        _links:
+          $ref: "#/components/schemas/Links"
+    AuthAuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+        actionType:
+          type: string
+        username:
+          type: string
+        ipAddress:
+          type: string
+        userAgent:
+          type: string
+        endpoint:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+    EntityModelAuthAuditLog:
+      type: object
+      properties:
+        actionType:
+          type: string
+        username:
+          type: string
+        ipAddress:
+          type: string
+        userAgent:
+          type: string
+        endpoint:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+        _links:
+          $ref: "#/components/schemas/Links"
+    PagedModelEntityModelAuthAuditLog:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            authAuditLogs:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelAuthAuditLog"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+        actionType:
+          type: string
+        entityType:
+          type: string
+        entityId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        actorName:
+          type: string
+        payload:
+          type: object
+          additionalProperties:
+            type: object
+    EntityModelAuditLog:
+      type: object
+      properties:
+        actionType:
+          type: string
+        entityType:
+          type: string
+        entityId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        actorName:
+          type: string
+        payload:
+          type: object
+          additionalProperties:
+            type: object
+        _links:
+          $ref: "#/components/schemas/Links"
+    PagedModelEntityModelAuditLog:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            auditLogs:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    CollectionModelEntityModelAuditLog:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            auditLogs:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelAuditLog"
+        _links:
+          $ref: "#/components/schemas/Links"
+    PagedModelEntityModelProject:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            projects:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelProject"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    CollectionModelEntityModelProject:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            projects:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelProject"
+        _links:
+          $ref: "#/components/schemas/Links"
+    AuditLogRequestBody:
+      type: object
+      properties:
+        id:
+          type: string
+        actionType:
+          type: string
+        entityType:
+          type: string
+        entityId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        actorName:
+          type: string
+        payload:
+          type: object
+          additionalProperties:
+            type: object
+    AuthAuditLogRequestBody:
+      type: object
+      properties:
+        id:
+          type: string
+        actionType:
+          type: string
+        username:
+          type: string
+        ipAddress:
+          type: string
+        userAgent:
+          type: string
+        endpoint:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+    DeveloperRequestBody:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        skills:
+          type: string
+        tasks:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ProjectRequestBody:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        deadline:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - NOT_STARTED
+          - IN_PROGRESS
+          - COMPLETED
+          - ON_HOLD
+        tasks:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TaskRequestBody:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - BLOCKED
+        dueDate:
+          type: string
+          format: date
+        project:
+          type: string
+        developers:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DeveloperResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        skills:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TaskResponse:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - BLOCKED
+        dueDate:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UserRequestBody:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        password:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+            - ROLE_ADMIN
+            - ROLE_MANAGER
+            - ROLE_DEVELOPER
+            - ROLE_CONTRACTOR
+          uniqueItems: true
+        provider:
+          type: string
+        providerId:
+          type: string
     TaskDTO:
       type: object
       properties:
@@ -580,6 +3190,53 @@ components:
       required:
       - email
       - name
+    RegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+          maxLength: 2147483647
+          minLength: 6
+      required:
+      - email
+      - password
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+            - ROLE_ADMIN
+            - ROLE_MANAGER
+            - ROLE_DEVELOPER
+            - ROLE_CONTRACTOR
+          uniqueItems: true
+        provider:
+          type: string
     Pageable:
       type: object
       properties:
@@ -595,22 +3252,22 @@ components:
           type: array
           items:
             type: string
-    PageTaskDTO:
+    PageAuditLog:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
         size:
           type: integer
           format: int32
         content:
           type: array
           items:
-            $ref: "#/components/schemas/TaskDTO"
+            $ref: "#/components/schemas/AuditLog"
         number:
           type: integer
           format: int32
@@ -635,14 +3292,14 @@ components:
           format: int64
         sort:
           $ref: "#/components/schemas/SortObject"
-        pageNumber:
-          type: integer
-          format: int32
+        paged:
+          type: boolean
         pageSize:
           type: integer
           format: int32
-        paged:
-          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
         unpaged:
           type: boolean
     SortObject:
@@ -654,15 +3311,59 @@ components:
           type: boolean
         unsorted:
           type: boolean
-    PageProjectDTO:
+    ErrorResponse:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+        details:
+          type: string
+        errorCode:
+          type: string
+    PageTaskDTO:
+      type: object
+      properties:
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PageProjectDTO:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
         size:
           type: integer
           format: int32
@@ -686,67 +3387,15 @@ components:
           $ref: "#/components/schemas/PageableObject"
         empty:
           type: boolean
-    AuditLog:
-      type: object
-      properties:
-        id:
-          type: string
-        actionType:
-          type: string
-        entityType:
-          type: string
-        entityId:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        actorName:
-          type: string
-        payload:
-          type: object
-          additionalProperties:
-            type: object
-    PageAuditLog:
-      type: object
-      properties:
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            $ref: "#/components/schemas/AuditLog"
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: "#/components/schemas/SortObject"
-        numberOfElements:
-          type: integer
-          format: int32
-        first:
-          type: boolean
-        last:
-          type: boolean
-        pageable:
-          $ref: "#/components/schemas/PageableObject"
-        empty:
-          type: boolean
     PageDeveloperDTO:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
         size:
           type: integer
           format: int32
@@ -770,3 +3419,34 @@ components:
           $ref: "#/components/schemas/PageableObject"
         empty:
           type: boolean
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        hreflang:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        deprecation:
+          type: string
+        profile:
+          type: string
+        name:
+          type: string
+        templated:
+          type: boolean
+    Links:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/Link"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: JWT authorization header using the Bearer scheme
+      name: Authorization
+      in: header
+      scheme: bearer
+      bearerFormat: JWT
