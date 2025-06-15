@@ -2,6 +2,8 @@ package com.buildmaster.project_tracker.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -13,6 +15,17 @@ import java.time.LocalDateTime;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException e) {
+        ErrorResponse errorResponse = buildErrorResponse(e, null,"FORBIDDEN");
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthError(AuthenticationException e) {
+        ErrorResponse errorResponse = buildErrorResponse(e, null,"UNAUTHORIZED");
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
@@ -30,7 +43,7 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(
                 LocalDateTime.now(),
                 ex.getMessage(),
-                request.getDescription(false),
+                request != null ? request.getDescription(false) : null,
                 errorCode);
     }
 }
