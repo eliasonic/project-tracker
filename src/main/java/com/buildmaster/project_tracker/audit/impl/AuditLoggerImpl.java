@@ -19,11 +19,11 @@ import java.util.Map;
  * @see AuditActionType
  */
 @Component
-public class MongoAuditLogger implements AuditLogger {
+public class AuditLoggerImpl implements AuditLogger {
     private final AuditLogRepository auditLogRepository;
     private final ObjectMapper objectMapper;
 
-    public MongoAuditLogger(AuditLogRepository auditLogRepository, ObjectMapper objectMapper) {
+    public AuditLoggerImpl(AuditLogRepository auditLogRepository, ObjectMapper objectMapper) {
         this.auditLogRepository = auditLogRepository;
         this.objectMapper = objectMapper;
     }

@@ -8,4 +8,8 @@ public enum AuditActionType {
     UPDATE,
     DELETE,
     ASSIGN,
+    REGISTRATION_ATTEMPT,
+    LOGIN_ATTEMPT,
+    OAUTH_LOGIN,
+    UNAUTHORIZED_ACCESS
 }

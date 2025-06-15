@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * Represents an audit log entry stored in MongoDB for significant actions performed within the system.
+ * Represents an audit log entry for resource-related actions performed within the system.
  */
 @Document(collection = "audit_logs")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
