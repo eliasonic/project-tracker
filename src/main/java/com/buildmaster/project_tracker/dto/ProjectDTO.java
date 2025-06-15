@@ -20,4 +20,3 @@ public record ProjectDTO(
 
         ProjectStatus status
 ) {}
-

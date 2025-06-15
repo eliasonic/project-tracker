@@ -1,26 +1,23 @@
 package com.buildmaster.project_tracker.controller;
 
 import com.buildmaster.project_tracker.dto.ProjectDTO;
-import com.buildmaster.project_tracker.service.impl.ProjectServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.buildmaster.project_tracker.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/projects")
 @RequiredArgsConstructor
 public class ProjectController {
-    private final ProjectServiceImpl projectService;
+    private final ProjectService projectService;
 
     @GetMapping
     @Operation(summary = "Get all projects with pagination")
