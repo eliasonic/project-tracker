@@ -23,5 +23,5 @@ public class AuthAuditLog {
     private String endpoint;
     private LocalDateTime timestamp = LocalDateTime.now();
     private boolean success;
-    private String errorMessage;
+    private String details;
 }
