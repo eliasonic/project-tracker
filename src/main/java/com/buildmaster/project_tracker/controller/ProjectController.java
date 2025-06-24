@@ -1,6 +1,7 @@
 package com.buildmaster.project_tracker.controller;
 
 import com.buildmaster.project_tracker.dto.ProjectDTO;
+import com.buildmaster.project_tracker.security.CustomUserDetails;
 import com.buildmaster.project_tracker.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +36,8 @@ public class ProjectController {
     @PostMapping
     @Operation(summary = "Create a new project")
     public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO,
-            @RequestHeader("X-Actor-Name") String actorName) {
-        ProjectDTO createdProject = projectService.createProject(projectDTO, actorName);
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ProjectDTO createdProject = projectService.createProject(projectDTO, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
     }
 

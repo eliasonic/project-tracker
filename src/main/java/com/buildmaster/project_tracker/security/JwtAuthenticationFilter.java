@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
             String token = tokenProvider.extractToken(request);
 
             if (token != null) {
@@ -45,10 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception ex) {
-            log.warn("Received invalid auth token");
-        }
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
     }
 }
