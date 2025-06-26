@@ -2,6 +2,7 @@ package com.buildmaster.project_tracker.service.impl;
 
 import com.buildmaster.project_tracker.audit.AuditLogger;
 import com.buildmaster.project_tracker.dto.ProjectDTO;
+import com.buildmaster.project_tracker.dto.ProjectListDTO;
 import com.buildmaster.project_tracker.exception.ResourceNotFoundException;
 import com.buildmaster.project_tracker.mapper.Mapper;
 import com.buildmaster.project_tracker.model.jpa.Project;
@@ -31,9 +32,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Cacheable(value = "projects", key = "{#pageable.pageNumber,#pageable.pageSize,#pageable.sort}")
-    public Page<ProjectDTO> getAllProjects(Pageable pageable) {
+    public Page<ProjectListDTO> getAllProjects(Pageable pageable) {
         return projectRepository.findAll(pageable)
-                .map(projectMapper::mapToDTO);
+                .map(ProjectListDTO::mapToDto);
     }
 
     @Override

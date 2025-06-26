@@ -1,8 +1,11 @@
 package com.buildmaster.project_tracker.controller;
 
 import com.buildmaster.project_tracker.dto.ProjectDTO;
+import com.buildmaster.project_tracker.dto.ProjectListDTO;
 import com.buildmaster.project_tracker.security.CustomUserDetails;
 import com.buildmaster.project_tracker.service.ProjectService;
+import com.buildmaster.project_tracker.service.impl.ProjectMetricsService;
+import io.micrometer.core.instrument.Timer;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +23,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
+    private final ProjectMetricsService metricsService;
 
     @GetMapping
     @Operation(summary = "Get all projects with pagination")
-    public ResponseEntity<Page<ProjectDTO>> getAllProjects(Pageable pageable) {
+    public ResponseEntity<Page<ProjectListDTO>> getAllProjects(Pageable pageable) {
         return ResponseEntity.ok(projectService.getAllProjects(pageable));
     }
 
@@ -35,23 +39,29 @@ public class ProjectController {
 
     @PostMapping
     @Operation(summary = "Create a new project")
-    public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ProjectDTO createdProject = projectService.createProject(projectDTO, userDetails.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
+    public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Timer.Sample timer = metricsService.startTimer();
+        try {
+            ProjectDTO createdProject = projectService.createProject(projectDTO, userDetails.getUsername());
+            metricsService.incrementCreateCounter();
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
+        } finally {
+            metricsService.recordTimer(timer);
+        }
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing project")
     public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO,
-            @RequestHeader("X-Actor-Name") String actorName) {
-        return ResponseEntity.ok(projectService.updateProject(id, projectDTO, actorName));
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(projectService.updateProject(id, projectDTO, userDetails.getUsername()));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a project by ID")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id, @RequestHeader("X-Actor-Name") String actorName) {
-        projectService.deleteProject(id, actorName);
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        projectService.deleteProject(id, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 

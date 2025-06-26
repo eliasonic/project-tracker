@@ -1,13 +1,14 @@
 package com.buildmaster.project_tracker.service;
 
 import com.buildmaster.project_tracker.dto.ProjectDTO;
+import com.buildmaster.project_tracker.dto.ProjectListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ProjectService {
-    Page<ProjectDTO> getAllProjects(Pageable pageable);
+    Page<ProjectListDTO> getAllProjects(Pageable pageable);
 
     ProjectDTO getProjectById(Long id);
 
