@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -31,6 +32,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final AuthAuditLogger authAuditLogger;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -45,12 +47,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             }
 
             User user = processOAuth2User(email, oauthToken.getAuthorizedClientRegistrationId(), providerId);
-            UserDetails userDetails = new CustomUserDetails(user);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
             String token = tokenProvider.generateToken(userDetails);
 
             authAuditLogger.logOAuthLogin(AuditActionType.OAUTH_LOGIN, email, "google", request);
 
-            response.sendRedirect("/auth/oauth2/success?token=" + token);
+            response.sendRedirect("/auth/oauth2/success?token=" + token + "&email=" + email);
         } catch (Exception e) {
             authAuditLogger.logUnauthorizedAccess(AuditActionType.UNAUTHORIZED_ACCESS,
                     new OAuth2AuthenticationException("OAuth2 processing failed"), request);

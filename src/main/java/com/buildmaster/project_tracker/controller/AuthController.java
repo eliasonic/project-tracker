@@ -36,8 +36,8 @@ public class AuthController {
     }
 
     @GetMapping("/oauth2/success")
-    public ResponseEntity<AuthResponse> oauthSuccess(@RequestParam String token) {
-        return ResponseEntity.ok(new AuthResponse(token));
+    public ResponseEntity<AuthResponse> oauthSuccess(@RequestParam String token, @RequestParam String email) {
+        return ResponseEntity.ok(new AuthResponse(email, token));
     }
 
     @GetMapping("/oauth2/failure")

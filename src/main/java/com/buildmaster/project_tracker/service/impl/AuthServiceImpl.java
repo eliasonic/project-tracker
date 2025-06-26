@@ -19,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final AuthAuditLogger authAuditLogger;
-    private final CustomUserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest) throws BadRequestException {
         if (userRepository.existsByEmail(request.email())) {
@@ -57,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
         String token = tokenProvider.generateToken(userDetails);
-        return new AuthResponse(token);
+        return new AuthResponse(userDetails.getUsername(), token);
     }
 
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
@@ -73,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
 
             authAuditLogger.logLoginAttempt(
                     AuditActionType.LOGIN_ATTEMPT, request.email(), true, null, httpRequest);
-            return new AuthResponse(token);
+            return new AuthResponse(userDetails.getUsername(), token);
 
         } catch (BadCredentialsException ex) {
             authAuditLogger.logLoginAttempt(
