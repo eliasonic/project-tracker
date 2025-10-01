@@ -1,5 +1,6 @@
 package com.buildmaster.project_tracker.service.impl;
 
+import com.buildmaster.project_tracker.aspect.annotation.AuthAuditable;
 import com.buildmaster.project_tracker.audit.AuditActionType;
 import com.buildmaster.project_tracker.audit.AuthAuditLogger;
 import com.buildmaster.project_tracker.dto.AuthResponse;
@@ -38,10 +39,9 @@ public class AuthServiceImpl implements AuthService {
     private final AuthAuditLogger authAuditLogger;
     private final UserDetailsService userDetailsService;
 
+    @AuthAuditable(action = AuditActionType.REGISTRATION_ATTEMPT)
     public AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest) throws BadRequestException {
         if (userRepository.existsByEmail(request.email())) {
-            authAuditLogger.logRegistrationAttempt(
-                    AuditActionType.REGISTRATION_ATTEMPT, request.email(), false, "Email already exists", httpRequest);
             throw new BadRequestException("Email already in use");
         }
 
@@ -53,14 +53,13 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
-        authAuditLogger.logRegistrationAttempt(
-                AuditActionType.REGISTRATION_ATTEMPT, request.email(), true, null, httpRequest);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
         String token = tokenProvider.generateToken(userDetails);
         return new AuthResponse(userDetails.getUsername(), token);
     }
 
+    @AuthAuditable(action = AuditActionType.LOGIN_ATTEMPT)
     public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -72,13 +71,8 @@ public class AuthServiceImpl implements AuthService {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = tokenProvider.generateToken(userDetails);
 
-            authAuditLogger.logLoginAttempt(
-                    AuditActionType.LOGIN_ATTEMPT, request.email(), true, null, httpRequest);
             return new AuthResponse(userDetails.getUsername(), token);
-
         } catch (BadCredentialsException ex) {
-            authAuditLogger.logLoginAttempt(
-                    AuditActionType.LOGIN_ATTEMPT, request.email(), false, "Invalid credentials", httpRequest);
             throw new BadCredentialsException("Invalid email/password");
         }
     }
